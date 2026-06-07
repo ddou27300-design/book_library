@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::main}, 'Favorites', ~{}, ~{})}">
+<head><title>Favorites - GROUP2</title></head>
+<body>
+<main>
+<div class="page-header-section">
+    <div class="container">
+        <h1 class="page-title">My Favorites</h1>
+        <p class="page-subtitle">Books you've saved for later</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4" th:if="${!#lists.isEmpty(favorites)}">
+        <div class="col-6 col-md-4 col-lg-3" th:each="fav : ${favorites}">
+            <div class="book-card h-100">
+                <div class="book-cover">
+                    <img th:if="${fav.book.coverImage != null}"
+                         th:src="@{'/'+${fav.book.coverImage}}"
+                         th:alt="${fav.book.title}" class="img-fluid"/>
+                    <div th:unless="${fav.book.coverImage != null}" class="book-cover-placeholder">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div class="book-overlay">
+                        <a th:href="@{/books/{id}(id=${fav.book.id})}" class="btn btn-sm btn-light">
+                            <i class="bi bi-eye me-1"></i>View
+                        </a>
+                    </div>
+                </div>
+                <div class="book-info">
+                    <span class="book-category" th:text="${fav.book.category?.name}">Category</span>
+                    <h6 class="book-title" th:text="${fav.book.title}">Title</h6>
+                    <p class="book-author"><i class="bi bi-person me-1"></i><span th:text="${fav.book.author}">Author</span></p>
+                    <div class="book-meta d-flex justify-content-between">
+                        <span class="downloads"><i class="bi bi-download me-1"></i><span th:text="${fav.book.totalDownloads}">0</span></span>
+                        <a th:href="@{/books/{id}(id=${fav.book.id})}" class="btn btn-sm btn-primary-custom">Read</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(favorites)}" class="text-center py-5">
+        <i class="bi bi-heart display-1 text-muted d-block mb-3"></i>
+        <h4 class="text-muted">No favorites yet</h4>
+        <p class="text-muted">Browse books and add them to your favorites</p>
+        <a href="/books" class="btn btn-primary-custom">Browse Books</a>
+    </div>
+</div>
+</main>
+</body>
+</html>

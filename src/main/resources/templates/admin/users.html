@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/admin-layout :: layout(~{::main}, 'Users', ~{}, ~{}, 'users')}">
+<head><title>Users - GROUP2 Admin</title></head>
+<body>
+<main>
+<div class="p-4">
+    <h2 class="mb-4">Users</h2>
+
+    <!-- Search -->
+    <form action="/admin/users" method="get" class="mb-4">
+        <div class="input-group" style="max-width:400px;">
+            <input type="text" name="keyword" class="form-control" th:value="${keyword}" placeholder="Search users..."/>
+            <button class="btn btn-primary-custom" type="submit"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
+
+    <!-- Users Table -->
+    <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}">1</td>
+                            <td th:text="${user.fullName}">Name</td>
+                            <td th:text="${user.email}">Email</td>
+                            <td>
+                                <span class="badge" th:text="${user.role}" th:classappend="${user.role.name() == 'ROLE_ADMIN'} ? 'bg-warning text-dark' : 'bg-info'">Role</span>
+                            </td>
+                            <td>
+                                <span class="badge" th:text="${user.enabled} ? 'Active' : 'Disabled'"
+                                      th:classappend="${user.enabled} ? 'bg-success' : 'bg-danger'">Status</span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <form th:action="@{/admin/users/{id}/toggle(id=${user.id})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-primary"
+                                                th:text="${user.enabled} ? 'Disable' : 'Enable'">Toggle</button>
+                                    </form>
+                                    <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="post" class="d-inline"
+                                          onsubmit="return confirm('Delete this user?')">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="6" class="text-center text-muted py-4">No users found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

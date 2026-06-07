@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout(~{::main}, ~{::title}, ~{}, ~{})}">
+<head>
+    <title>Contact Us - GROUP2</title>
+</head>
+<body>
+<main>
+
+<section class="page-header-section">
+    <div class="container">
+        <span class="section-badge">Contact</span>
+        <h1 class="page-title">Get in Touch</h1>
+        <p class="page-subtitle">Have questions or feedback? We'd love to hear from you.</p>
+    </div>
+</section>
+
+<section class="section-py">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <span class="section-badge">Send a Message</span>
+                <h2 class="section-title mb-4">Contact Form</h2>
+
+                <div th:if="${success}" class="alert alert-success">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <span th:text="${success}"></span>
+                </div>
+
+                <form th:action="@{/contact}" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label fw-medium">Full Name</label>
+                                <input type="text" name="name" class="form-control form-control-lg"
+                                       placeholder="Your full name" required/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label fw-medium">Email Address</label>
+                                <input type="email" name="email" class="form-control form-control-lg"
+                                       placeholder="you@example.com" required/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label fw-medium">Subject</label>
+                                <input type="text" name="subject" class="form-control form-control-lg"
+                                       placeholder="How can we help?" required/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label fw-medium">Message</label>
+                                <textarea name="message" class="form-control form-control-lg" rows="5"
+                                          placeholder="Tell us more..." required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-auth-primary">
+                                <i class="bi bi-send me-2"></i>Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-lg-5">
+                <span class="section-badge">Reach Us</span>
+                <h2 class="section-title mb-4">Contact Info</h2>
+
+                <div class="d-flex flex-column gap-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="category-icon flex-shrink-0" style="width:44px;height:44px;font-size:1.1rem;">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-head mb-1">Email</h6>
+                            <p class="text-muted mb-0">admin@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="category-icon flex-shrink-0" style="width:44px;height:44px;font-size:1.1rem;">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-head mb-1">Location</h6>
+                            <p class="text-muted mb-0">Online — Available Worldwide</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="category-icon flex-shrink-0" style="width:44px;height:44px;font-size:1.1rem;">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-head mb-1">Response Time</h6>
+                            <p class="text-muted mb-0">We typically respond within 24 hours</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 p-4" style="background:var(--ink-mid);border:1px solid var(--border);border-radius:var(--radius-md);">
+                    <h6 class="text-head mb-2"><i class="bi bi-info-circle text-amber me-2"></i>FAQ</h6>
+                    <p class="text-muted small mb-3">Before reaching out, check our frequently asked questions for quick answers.</p>
+                    <a href="/books" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-book me-1"></i>Browse Books
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::main}, ~{::title}, ~{}, ~{})}">
+<head><title>Book Catalog - GROUP2</title></head>
+<body>
+<main>
+<div class="page-header-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="/" class="text-white-50">Home</a></li>
+                <li class="breadcrumb-item active text-white">Catalog</li>
+            </ol>
+        </nav>
+        <h1 class="page-title">Book Catalog</h1>
+        <p class="page-subtitle">Browse our complete collection of books</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar filters -->
+        <div class="col-lg-3">
+            <div class="filter-card">
+                <h6 class="filter-title"><i class="bi bi-funnel me-2"></i>Filter Books</h6>
+
+                <!-- Search -->
+                <form action="/books" method="get" id="filterForm">
+                    <input type="hidden" name="categoryId"
+                           th:value="${selectedCategory?.id}"/>
+                    <div class="mb-3">
+                        <label class="filter-label">Search</label>
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control"
+                                   th:value="${keyword}" placeholder="Title or author..."/>
+                            <button class="btn btn-primary-custom" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Categories -->
+                <div class="mb-3">
+                    <label class="filter-label">Category</label>
+                    <div class="category-filter-list">
+                        <a th:href="@{/books(keyword=${keyword})}"
+                           th:classappend="${selectedCategory == null} ? 'active'"
+                           class="category-filter-item">
+                            <i class="bi bi-grid me-2"></i>All Categories
+                        </a>
+                        <a th:each="cat : ${categories}"
+                           th:href="@{/books(categoryId=${cat.id}, keyword=${keyword})}"
+                           th:classappend="${selectedCategory?.id == cat.id} ? 'active'"
+                           th:text="${cat.name}"
+                           class="category-filter-item">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books Grid -->
+        <div class="col-lg-9">
+            <!-- Results header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <span class="results-count">
+                        <span th:text="${books.totalElements}">0</span> books found
+                        <span th:if="${keyword != null and !keyword.empty}"> for "<strong th:text="${keyword}"></strong>"</span>
+                        <span th:if="${selectedCategory != null}"> in <strong th:text="${selectedCategory.name}"></strong></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row g-4" th:if="${!books.empty}">
+                <div class="col-6 col-md-4 col-xl-3" th:each="book : ${books}">
+                    <div class="book-card h-100">
+                        <div class="book-cover">
+                            <img th:if="${book.coverImage != null}"
+                                 th:src="@{'/'+${book.coverImage}}"
+                                 th:alt="${book.title}" class="img-fluid"/>
+                            <div th:unless="${book.coverImage != null}" class="book-cover-placeholder">
+                                <i class="bi bi-book"></i>
+                            </div>
+                            <div class="book-overlay">
+                                <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-light">
+                                    <i class="bi bi-eye me-1"></i>Details
+                                </a>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <span class="book-category" th:text="${book.category?.name}">Category</span>
+                            <h6 class="book-title" th:text="${book.title}">Book Title</h6>
+                            <p class="book-author"><i class="bi bi-person me-1"></i><span th:text="${book.author}">Author</span></p>
+                            <div class="book-meta d-flex justify-content-between align-items-center">
+                                <span class="downloads"><i class="bi bi-download me-1"></i><span th:text="${book.totalDownloads}">0</span></span>
+                                <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-primary-custom">Read</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <div th:if="${books.empty}" class="empty-state text-center py-5">
+                <i class="bi bi-search display-2 text-muted d-block mb-3"></i>
+                <h4 class="text-muted">No books found</h4>
+                <p class="text-muted">Try different keywords or browse all categories</p>
+                <a href="/books" class="btn btn-primary-custom">Browse All Books</a>
+            </div>
+
+            <!-- Pagination -->
+            <nav th:if="${totalPages > 1}" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/books(page=${currentPage - 1}, keyword=${keyword}, categoryId=${selectedCategory?.id})}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:text="${i + 1}"
+                           th:href="@{/books(page=${i}, keyword=${keyword}, categoryId=${selectedCategory?.id})}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/books(page=${currentPage + 1}, keyword=${keyword}, categoryId=${selectedCategory?.id})}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,267 @@
+/* ============================================================
+   ── BOOKLIB DARK EDITORIAL ADMIN LAYOUT SYSTEM ──────────────
+   ============================================================ */
+
+/* Default Dark Theme Variables */
+:root {
+    --bg-dark: #0d0f14;
+    --sidebar-bg: #161921;
+    --card-dark: #1e2231;
+    --border-dark: #2a3147;
+    --text-primary: #eef0f6;
+    --text-muted: #8892a8;
+    --accent-amber: #e8a030;
+    --accent-amber-dim: rgba(232, 160, 48, 0.12);
+    --transition-speed: 0.3s ease;
+}
+
+/* Luxury Light Theme Palette Overrides */
+body.light-theme {
+    --bg-dark: #f9f9fb;
+    --sidebar-bg: #f0f2f5;
+    --card-dark: #ffffff;
+    --border-dark: #dbe0eb;
+    --text-primary: #111622;
+    --text-muted: #626d83;
+    --accent-amber: #d98216;
+    --accent-amber-dim: rgba(217, 130, 22, 0.1);
+}
+
+/* Ensure global elements use smooth animations during transitions */
+body, .admin-sidebar, .admin-main, .admin-topbar, .sidebar-item, .topbar-user-btn {
+    transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed) !important;
+}
+
+/* Theme toggle switch styling */
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+.theme-toggle-btn:hover {
+    background-color: var(--accent-amber-dim);
+    color: var(--accent-amber);
+}
+
+/* Master Framework Setup */
+body.admin-body {
+    background-color: var(--bg-dark) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
+    margin: 0;
+    padding: 0;
+    display: block !important;
+}
+
+.admin-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* --- Smooth Sidebar Core Adjustments --- */
+.admin-sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-dark);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.sidebar-brand {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-brand i {
+    color: var(--accent-amber);
+}
+
+/* Navigation Menu Stack Fix */
+.sidebar-nav {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-section-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+/* Anchor Styling Overrides */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-muted) !important;
+    text-decoration: none !important;
+    font-size: 0.92rem;
+    font-weight: 500;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    transition: 0.2s ease;
+}
+
+.sidebar-item i {
+    font-size: 1.1rem;
+    width: 20px;
+    color: var(--accent-amber);
+}
+
+.sidebar-item:hover, .sidebar-item.active {
+    background-color: var(--accent-amber-dim) !important;
+    color: var(--accent-amber) !important;
+}
+
+/* Form Logout Reset */
+button.sidebar-logout {
+    cursor: pointer;
+    width: 100%;
+}
+
+/* --- Smooth Content Area Transition --- */
+.admin-main-stage {
+    flex-grow: 1;
+    margin-left: 260px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-dark);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.admin-topbar {
+    height: 70px;
+    background-color: var(--sidebar-bg);
+    border-bottom: 1px solid var(--border-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.topbar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.topbar-user-btn {
+    background-color: var(--card-dark);
+    border: 1px solid var(--border-dark) !important;
+    color: var(--text-primary) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.admin-content {
+    padding: 2.5rem;
+    flex-grow: 1;
+}
+
+.admin-content-view {
+    padding: 30px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1030;
+    transition: opacity 0.2s linear;
+}
+
+.sidebar-overlay.show {
+    display: block !important;
+}
+
+/* ============================================================
+   ── DESKTOP COLLAPSE STATE STYLES ────────────────────────────
+   ============================================================ */
+@media (min-width: 992px) {
+    .admin-wrapper.sidebar-collapsed .admin-sidebar {
+        margin-left: -260px !important;
+    }
+}
+
+/* ============================================================
+   ── MOBILE OVERLAY LAYER STYLES ──────────────────────────────
+   ============================================================ */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        position: fixed !important;
+        left: -260px !important;
+        top: 0;
+        bottom: 0;
+        z-index: 1050 !important;
+        margin-left: 0 !important;
+    }
+
+    .admin-wrapper.sidebar-mobile-open .admin-sidebar {
+        left: 0 !important;
+    }
+}

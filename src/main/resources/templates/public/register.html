@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Register - GROUP2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="/css/main.css" rel="stylesheet"/>
+    <style>
+        .auth-body { min-height: 100vh; overflow-y: auto; }
+    </style>
+</head>
+<body class="auth-body">
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-logo mb-4 d-flex flex-column align-items-center text-center">
+            <img th:src="@{/images/Logo.png}" alt="Logo" style="width: 100px; height: auto; max-height: 100px; object-fit: contain; margin-bottom: 1.5rem;" />
+            <h1 class="auth-title text-white fw-bold mb-1" style="font-family: var(--font-display); font-size: 2.2rem; letter-spacing: -0.02em;">GROUP2</h1>
+            <p class="auth-subtitle text-muted small">Join our community of book lovers</p>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <form th:action="@{/register}" th:object="${registerDto}" method="post">
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-medium">Full Name</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-person input-icon"></i>
+                    <input type="text" th:field="*{fullName}"
+                           class="form-control form-control-lg input-with-icon"
+                           th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'"
+                           placeholder="Your full name"/>
+                </div>
+                <div class="invalid-feedback" th:errors="*{fullName}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-medium">Email Address</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-envelope input-icon"></i>
+                    <input type="email" th:field="*{email}"
+                           class="form-control form-control-lg input-with-icon"
+                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                           placeholder="you@example.com"/>
+                </div>
+                <div class="invalid-feedback" th:errors="*{email}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-medium">Password</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-lock input-icon"></i>
+                    <input type="password" th:field="*{password}"
+                           class="form-control form-control-lg input-with-icon"
+                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                           placeholder="Min. 6 characters"/>
+                </div>
+                <div class="invalid-feedback" th:errors="*{password}"></div>
+            </div>
+
+            <div class="form-group mb-4">
+                <label class="form-label fw-medium">Confirm Password</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-lock-fill input-icon"></i>
+                    <input type="password" th:field="*{confirmPassword}"
+                           class="form-control form-control-lg input-with-icon"
+                           th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid'"
+                           placeholder="Repeat your password"/>
+                </div>
+                <div class="invalid-feedback" th:errors="*{confirmPassword}"></div>
+            </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="agree" required/>
+                <label class="form-check-label" for="agree">
+                    I agree to the <a href="#" class="auth-link">Terms of Service</a> and
+                    <a href="#" class="auth-link">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-auth-primary w-100">
+                <i class="bi bi-person-plus me-2"></i>Create Account
+            </button>
+        </form>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <div class="text-center">
+            <p class="mb-0">Already have an account?
+                <a href="/login" class="auth-link fw-semibold">Sign in</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

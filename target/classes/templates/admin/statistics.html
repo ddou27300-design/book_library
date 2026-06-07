@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/admin-layout :: layout(~{::main}, 'Statistics', ~{}, ~{}, 'statistics')}">
+<head><title>Statistics - GROUP2 Admin</title></head>
+<body>
+<main>
+<div class="p-4">
+    <h2 class="mb-4">Statistics</h2>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-book fs-1 mb-2" style="color:var(--amber);"></i>
+                    <div class="fs-2 fw-bold" style="color:var(--amber);" th:text="${totalBooks}">0</div>
+                    <div class="text-muted small">Total Books</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-people fs-1 mb-2" style="color:var(--sky);"></i>
+                    <div class="fs-2 fw-bold" style="color:var(--sky);" th:text="${totalUsers}">0</div>
+                    <div class="text-muted small">Total Users</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-download fs-1 mb-2" style="color:var(--emerald);"></i>
+                    <div class="fs-2 fw-bold" style="color:var(--emerald);" th:text="${totalDownloads}">0</div>
+                    <div class="text-muted small">Total Downloads</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body text-center py-4">
+                    <div class="fs-3 fw-bold" th:text="${todayDownloads}">0</div>
+                    <div class="text-muted small">Today's Downloads</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body text-center py-4">
+                    <div class="fs-3 fw-bold" th:text="${todayVisitors}">0</div>
+                    <div class="text-muted small">Today's Visitors</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body text-center py-4">
+                    <div class="fs-3 fw-bold" th:text="${totalVisitors}">0</div>
+                    <div class="text-muted small">Total Visitors</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Downloaded Books -->
+    <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+        <div class="card-header fw-bold" style="background:var(--ink-lift);border-bottom:1px solid var(--border);">Most Downloaded Books</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Downloads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${topBooks}">
+                            <td th:text="${book.title}">Title</td>
+                            <td th:text="${book.author}">Author</td>
+                            <td th:text="${book.totalDownloads}">0</td>
+                        </tr>
+                        <tr th:if="${topBooks.empty}">
+                            <td colspan="3" class="text-center text-muted py-4">No data yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout(~{::main}, ~{::title}, ~{}, ~{})}">
+<head>
+    <title>About Us - GROUP2</title>
+</head>
+<body>
+<main>
+
+<section class="page-header-section">
+    <div class="container">
+        <span class="section-badge">About Us</span>
+        <h1 class="page-title">Our Story</h1>
+        <p class="page-subtitle">Making knowledge accessible to everyone, everywhere.</p>
+    </div>
+</section>
+
+<section class="section-py">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <span class="section-badge">Our Mission</span>
+                <h2 class="section-title mb-3">Building the World's Open Digital Library</h2>
+                <p class="mb-3">
+                    GROUP2 was created with a simple belief: knowledge should be free and accessible to everyone.
+                    We provide a platform where readers can discover, read, and download books across every genre
+                    without barriers.
+                </p>
+                <p class="mb-4">
+                    Whether you're a student researching a topic, a professional expanding your expertise, or
+                    a curious mind seeking new ideas — GROUP2 is your gateway to thousands of curated titles.
+                </p>
+                <div class="d-flex gap-4">
+                    <div class="stat-item text-start">
+                        <div class="stat-number" th:text="${totalBooks ?: 0}">0</div>
+                        <div class="stat-label">Books Available</div>
+                    </div>
+                    <div class="stat-item text-start">
+                        <div class="stat-number" th:text="${totalDownloads ?: 0}">0</div>
+                        <div class="stat-label">Total Downloads</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-image-wrapper" style="width: 100%; height: 100%; min-height: 480px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 24px; box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2);">
+                    <img th:src="@{/images/Image.png}"
+                         src="/images/Image.png"
+                         alt="About Us Illustration"
+                         style="width: 100%; max-width: 420px; height: auto; object-fit: contain; display: block; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); animation: fadeIn 0.6s ease-out;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-py bg-light">
+    <div class="container text-center">
+        <span class="section-badge">Why Choose Us</span>
+        <h2 class="section-title mb-5">What Makes GROUP2 Different</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="category-card h-100 p-4">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-globe"></i>
+                    </div>
+                    <h5 class="text-head mb-2">Free Access</h5>
+                    <p class="text-muted small mb-0">All books are available for free reading and downloading. No hidden fees, no subscriptions.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card h-100 p-4">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-laptop"></i>
+                    </div>
+                    <h5 class="text-head mb-2">Read Online</h5>
+                    <p class="text-muted small mb-0">Built-in PDF reader lets you read directly in your browser without downloading anything.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card h-100 p-4">
+                    <div class="category-icon mb-3">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5 class="text-head mb-2">Curated Collection</h5>
+                    <p class="text-muted small mb-0">Every book is reviewed and categorized for easy discovery across multiple genres.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container text-center">
+        <h2 class="cta-title">Ready to Start Reading?</h2>
+        <p class="cta-subtitle">Join our community of readers today.</p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="/books" class="btn btn-hero-primary">
+                <i class="bi bi-grid me-2"></i>Browse Library
+            </a>
+            <a href="/register" class="btn btn-hero-outline" sec:authorize="!isAuthenticated()">
+                <i class="bi bi-person-plus me-2"></i>Join Free
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+</body>
+</html>

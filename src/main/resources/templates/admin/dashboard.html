@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/admin-layout :: layout(~{::main}, 'Dashboard', ~{}, ~{}, 'dashboard')}">
+<head><title>Dashboard - GROUP2 Admin</title></head>
+<body>
+<main>
+<div class="p-4">
+    <h2 class="mb-4">Dashboard</h2>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-bold">Total Books</div>
+                            <div class="fs-2 fw-bold text-amber" th:text="${totalBooks}">0</div>
+                        </div>
+                        <i class="bi bi-book fs-1" style="color:var(--amber);opacity:0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-bold">Total Users</div>
+                            <div class="fs-2 fw-bold" style="color:var(--sky);" th:text="${totalUsers}">0</div>
+                        </div>
+                        <i class="bi bi-people fs-1" style="color:var(--sky);opacity:0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-bold">Total Downloads</div>
+                            <div class="fs-2 fw-bold" style="color:var(--emerald);" th:text="${totalDownloads}">0</div>
+                        </div>
+                        <i class="bi bi-download fs-1" style="color:var(--emerald);opacity:0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-bold">Today's Visitors</div>
+                            <div class="fs-2 fw-bold" style="color:var(--rose);" th:text="${todayVisitors}">0</div>
+                        </div>
+                        <i class="bi bi-eye fs-1" style="color:var(--rose);opacity:0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Books -->
+    <div class="card border-0 shadow-sm mb-4" style="background:var(--ink-mid);border:1px solid var(--border);">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background:var(--ink-lift);border-bottom:1px solid var(--border);">
+            <h6 class="mb-0 fw-bold">Latest Books</h6>
+            <a href="/admin/books" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Downloads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${latestBooks}">
+                            <td th:text="${book.title}">Title</td>
+                            <td th:text="${book.author}">Author</td>
+                            <td th:text="${book.category?.name}">Category</td>
+                            <td th:text="${book.totalDownloads}">0</td>
+                        </tr>
+                        <tr th:if="${latestBooks.empty}">
+                            <td colspan="4" class="text-center text-muted py-4">No books yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

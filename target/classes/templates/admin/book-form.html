@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/admin-layout :: layout(~{::main}, (${isEdit} ? 'Edit Book' : 'Add Book'), ~{}, ~{}, 'books')}">
+<head><title th:text="${isEdit} ? 'Edit Book' : 'Add Book'">Book Form</title></head>
+<body>
+<main>
+<div class="p-4" style="max-width:700px;">
+    <h2 class="mb-4" th:text="${isEdit} ? 'Edit Book' : 'Add New Book'">Book Form</h2>
+
+    <div class="card border-0 shadow-sm" style="background:var(--ink-mid);border:1px solid var(--border);">
+        <div class="card-body p-4">
+            <form th:action="${isEdit} ? @{/admin/books/{id}/edit(id=${bookDto.id})} : @{/admin/books/add}"
+                  th:object="${bookDto}" method="post" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Title *</label>
+                    <input type="text" th:field="*{title}" class="form-control" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Author *</label>
+                    <input type="text" th:field="*{author}" class="form-control" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Category *</label>
+                    <select th:field="*{categoryId}" class="form-select" required>
+                        <option value="">Select Category</option>
+                        <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-medium">Description</label>
+                    <textarea th:field="*{description}" class="form-control" rows="4"></textarea>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">ISBN</label>
+                        <input type="text" th:field="*{isbn}" class="form-control"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Publish Year</label>
+                        <input type="number" th:field="*{publishYear}" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Publisher</label>
+                        <input type="text" th:field="*{publisher}" class="form-control"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Language</label>
+                        <input type="text" th:field="*{language}" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-medium">PDF File</label>
+                    <input type="file" th:field="*{pdfFile}" class="form-control" accept=".pdf"/>
+                    <div th:if="${isEdit and bookDto.existingPdfPath != null}" class="form-text text-muted">
+                        Current: <span th:text="${bookDto.existingPdfPath}"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-medium">Cover Image</label>
+                    <input type="file" th:field="*{coverFile}" class="form-control" accept="image/*"/>
+                    <div th:if="${isEdit and bookDto.existingCoverImage != null}" class="form-text text-muted">
+                        Current: <span th:text="${bookDto.existingCoverImage}"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="bi bi-check-lg me-1"></i><span th:text="${isEdit} ? 'Update Book' : 'Add Book'">Save</span>
+                    </button>
+                    <a href="/admin/books" class="btn btn-outline-primary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>
