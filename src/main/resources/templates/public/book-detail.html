@@ -18,28 +18,28 @@
         <!-- Book Cover -->
         <div class="col-md-4 col-lg-3">
             <div class="book-detail-cover">
-                <img th:if="${book.coverImage != null}"
-                     th:src="@{'/'+${book.coverImage}}"
+                <img th:if="${book.coverImageUrl != null}"
+                     th:src="${book.coverImageUrl}"
                      th:alt="${book.title}" class="img-fluid rounded-3 shadow-lg"/>
-                <div th:unless="${book.coverImage != null}" class="book-cover-large">
+                <div th:unless="${book.coverImageUrl != null}" class="book-cover-large">
                     <i class="bi bi-book-fill"></i>
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="d-grid gap-2 mt-4">
-                <a th:if="${book.pdfPath != null}"
+                <a th:if="${book.pdfFileUrl != null}"
                    th:href="@{/books/{id}/read(id=${book.id})}"
                    class="btn btn-primary-custom">
                     <i class="bi bi-eye me-2"></i>Read Online
                 </a>
-                <a th:if="${book.pdfPath != null}"
+                <a th:if="${book.pdfFileUrl != null}"
                    sec:authorize="isAuthenticated()"
                    th:href="@{/books/{id}/download(id=${book.id})}"
                    class="btn btn-outline-primary">
                     <i class="bi bi-download me-2"></i>Download PDF
                 </a>
-                <a th:if="${book.pdfPath != null}"
+                <a th:if="${book.pdfFileUrl != null}"
                    sec:authorize="!isAuthenticated()"
                    href="/login"
                    class="btn btn-outline-primary">

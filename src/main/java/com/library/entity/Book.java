@@ -27,9 +27,9 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    private String pdfPath;
+    private String pdfFileUrl;
 
-    private String coverImage;
+    private String coverImageUrl;
 
     private String isbn;
 
@@ -57,7 +57,7 @@ public class Book {
     public Book() {}
 
     public Book(Long id, String title, String author, String description, Category category,
-                String pdfPath, String coverImage, String isbn, Integer publishYear,
+                String pdfFileUrl, String coverImageUrl, String isbn, Integer publishYear,
                 String publisher, String language, Long totalDownloads, boolean active,
                 LocalDateTime createdAt, List<Favorite> favorites, List<DownloadHistory> downloadHistories) {
         this.id = id;
@@ -65,8 +65,8 @@ public class Book {
         this.author = author;
         this.description = description;
         this.category = category;
-        this.pdfPath = pdfPath;
-        this.coverImage = coverImage;
+        this.pdfFileUrl = pdfFileUrl;
+        this.coverImageUrl = coverImageUrl;
         this.isbn = isbn;
         this.publishYear = publishYear;
         this.publisher = publisher;
@@ -78,7 +78,6 @@ public class Book {
         this.downloadHistories = downloadHistories;
     }
 
-    // Builder
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
@@ -87,8 +86,8 @@ public class Book {
         private String author;
         private String description;
         private Category category;
-        private String pdfPath;
-        private String coverImage;
+        private String pdfFileUrl;
+        private String coverImageUrl;
         private String isbn;
         private Integer publishYear;
         private String publisher;
@@ -101,8 +100,8 @@ public class Book {
         public Builder author(String author) { this.author = author; return this; }
         public Builder description(String description) { this.description = description; return this; }
         public Builder category(Category category) { this.category = category; return this; }
-        public Builder pdfPath(String pdfPath) { this.pdfPath = pdfPath; return this; }
-        public Builder coverImage(String coverImage) { this.coverImage = coverImage; return this; }
+        public Builder pdfFileUrl(String pdfFileUrl) { this.pdfFileUrl = pdfFileUrl; return this; }
+        public Builder coverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; return this; }
         public Builder isbn(String isbn) { this.isbn = isbn; return this; }
         public Builder publishYear(Integer publishYear) { this.publishYear = publishYear; return this; }
         public Builder publisher(String publisher) { this.publisher = publisher; return this; }
@@ -117,8 +116,8 @@ public class Book {
             book.author = this.author;
             book.description = this.description;
             book.category = this.category;
-            book.pdfPath = this.pdfPath;
-            book.coverImage = this.coverImage;
+            book.pdfFileUrl = this.pdfFileUrl;
+            book.coverImageUrl = this.coverImageUrl;
             book.isbn = this.isbn;
             book.publishYear = this.publishYear;
             book.publisher = this.publisher;
@@ -139,10 +138,10 @@ public class Book {
     public void setDescription(String description) { this.description = description; }
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
-    public String getPdfPath() { return pdfPath; }
-    public void setPdfPath(String pdfPath) { this.pdfPath = pdfPath; }
-    public String getCoverImage() { return coverImage; }
-    public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
+    public String getPdfFileUrl() { return pdfFileUrl; }
+    public void setPdfFileUrl(String pdfFileUrl) { this.pdfFileUrl = pdfFileUrl; }
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
     public String getIsbn() { return isbn; }
     public void setIsbn(String isbn) { this.isbn = isbn; }
     public Integer getPublishYear() { return publishYear; }

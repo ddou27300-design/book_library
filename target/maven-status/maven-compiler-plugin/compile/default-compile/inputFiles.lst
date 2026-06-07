@@ -1,4 +1,5 @@
 C:\xampp\htdocs\book-library\src\main\java\com\library\entity\DownloadHistory.java
+C:\xampp\htdocs\book-library\src\main\java\com\library\service\CloudStorageService.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\DownloadHistoryService.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\OnlineBookLibraryApplication.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\entity\Favorite.java
@@ -6,6 +7,7 @@ C:\xampp\htdocs\book-library\src\main\java\com\library\repository\BookRepository
 C:\xampp\htdocs\book-library\src\main\java\com\library\controller\AuthController.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\config\WebConfig.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\FavoriteService.java
+C:\xampp\htdocs\book-library\src\main\java\com\library\service\impl\CloudStorageServiceImpl.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\FileStorageService.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\impl\DownloadHistoryServiceImpl.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\security\UserDetailsServiceImpl.java
@@ -13,14 +15,17 @@ C:\xampp\htdocs\book-library\src\main\java\com\library\entity\User.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\entity\VisitorLog.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\controller\BookController.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\repository\FavoriteRepository.java
+C:\xampp\htdocs\book-library\src\main\java\com\library\controller\AdminContactController.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\VisitorService.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\dto\BookDto.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\controller\HomeController.java
+C:\xampp\htdocs\book-library\src\main\java\com\library\repository\ContactRepository.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\repository\VisitorLogRepository.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\util\DataInitializer.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\impl\BookServiceImpl.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\BookService.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\impl\UserServiceImpl.java
+C:\xampp\htdocs\book-library\src\main\java\com\library\entity\Contact.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\config\SecurityConfig.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\repository\DownloadHistoryRepository.java
 C:\xampp\htdocs\book-library\src\main\java\com\library\service\impl\FileStorageServiceImpl.java

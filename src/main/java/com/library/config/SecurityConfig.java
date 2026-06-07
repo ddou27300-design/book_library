@@ -57,7 +57,7 @@ public class SecurityConfig {
                 // Public Assets
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                 // Public Authentication Pages
-                .requestMatchers("/login", "/register", "/", "/home").permitAll()
+                .requestMatchers("/login", "/register", "/", "/home", "/contact", "/about").permitAll()
                 // Role-Based Protection
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 // All other requests require authentication

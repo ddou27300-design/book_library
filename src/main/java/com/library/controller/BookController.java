@@ -5,22 +5,15 @@ import com.library.entity.Category;
 import com.library.entity.User;
 import com.library.service.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/books")
@@ -95,65 +88,46 @@ public class BookController {
                            @AuthenticationPrincipal UserDetails currentUser) {
         if (currentUser == null) return "redirect:/login";
         Book book = bookService.findById(id);
-        if (book.getPdfPath() == null) return "redirect:/books/" + id + "?error=nopdf";
+        if (book.getPdfFileUrl() == null) return "redirect:/books/" + id + "?error=nopdf";
         model.addAttribute("book", book);
         return "public/reader";
     }
 
     @GetMapping("/{id}/view")
-    public ResponseEntity<Resource> viewBook(@PathVariable Long id,
-                                             @AuthenticationPrincipal UserDetails currentUser) {
+    public ResponseEntity<Void> viewBook(@PathVariable Long id,
+                                         @AuthenticationPrincipal UserDetails currentUser) {
         if (currentUser == null) {
             return ResponseEntity.status(302).header(HttpHeaders.LOCATION, "/login").build();
         }
 
         Book book = bookService.findById(id);
-        if (book.getPdfPath() == null) return ResponseEntity.notFound().build();
+        if (book.getPdfFileUrl() == null) return ResponseEntity.notFound().build();
 
-        try {
-            Path filePath = Paths.get(book.getPdfPath()).toAbsolutePath();
-            Resource resource = new UrlResource(filePath.toUri());
-
-            if (!resource.exists()) return ResponseEntity.notFound().build();
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(resource);
-        } catch (MalformedURLException e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        // Redirect to the cloud-hosted PDF URL
+        return ResponseEntity.status(302)
+                .header(HttpHeaders.LOCATION, book.getPdfFileUrl())
+                .build();
     }
 
     @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> downloadBook(@PathVariable Long id,
-                                                  @AuthenticationPrincipal UserDetails currentUser,
-                                                  HttpServletRequest request) {
+    public ResponseEntity<Void> downloadBook(@PathVariable Long id,
+                                              @AuthenticationPrincipal UserDetails currentUser,
+                                              HttpServletRequest request) {
         if (currentUser == null) {
             return ResponseEntity.status(302).header(HttpHeaders.LOCATION, "/login").build();
         }
 
         Book book = bookService.findById(id);
-        if (book.getPdfPath() == null) return ResponseEntity.notFound().build();
+        if (book.getPdfFileUrl() == null) return ResponseEntity.notFound().build();
 
-        try {
-            Path filePath = Paths.get(book.getPdfPath()).toAbsolutePath();
-            Resource resource = new UrlResource(filePath.toUri());
+        User user = userService.findByEmail(currentUser.getUsername());
+        bookService.incrementDownloads(id);
+        downloadHistoryService.recordDownload(user, book, request.getRemoteAddr());
 
-            if (!resource.exists()) return ResponseEntity.notFound().build();
-
-            User user = userService.findByEmail(currentUser.getUsername());
-            bookService.incrementDownloads(id);
-            downloadHistoryService.recordDownload(user, book, request.getRemoteAddr());
-
-            String filename = book.getTitle().replaceAll("[^a-zA-Z0-9]", "_") + ".pdf";
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, "application/pdf")
-                    .body(resource);
-        } catch (MalformedURLException e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        // Redirect to the cloud-hosted PDF URL for download
+        return ResponseEntity.status(302)
+                .header(HttpHeaders.LOCATION, book.getPdfFileUrl())
+                .build();
     }
 
     @PostMapping("/{id}/favorite")

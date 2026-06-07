@@ -35,12 +35,12 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // Create admin if it doesn't exist
-        if (!userRepository.existsByEmail("admin@library.com")) {
+        if (!userRepository.existsByEmail("admin@gmail.com")) {
             // Standard Java setter instantiation instead of Lombok User.builder()
             User admin = new User();
-            admin.setFullName("System Admin");
-            admin.setEmail("admin@library.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setFullName("admin");
+            admin.setEmail("admin@gmail.com");
+            admin.setPassword(passwordEncoder.encode("admin@123"));
             admin.setRole(User.Role.ROLE_ADMIN);
             admin.setEnabled(true);
             

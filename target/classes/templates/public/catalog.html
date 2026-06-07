@@ -77,10 +77,10 @@
                 <div class="col-6 col-md-4 col-xl-3" th:each="book : ${books}">
                     <div class="book-card h-100">
                         <div class="book-cover">
-                            <img th:if="${book.coverImage != null}"
-                                 th:src="@{'/'+${book.coverImage}}"
+                            <img th:if="${book.coverImageUrl != null}"
+                                 th:src="${book.coverImageUrl}"
                                  th:alt="${book.title}" class="img-fluid"/>
-                            <div th:unless="${book.coverImage != null}" class="book-cover-placeholder">
+                            <div th:unless="${book.coverImageUrl != null}" class="book-cover-placeholder">
                                 <i class="bi bi-book"></i>
                             </div>
                             <div class="book-overlay">

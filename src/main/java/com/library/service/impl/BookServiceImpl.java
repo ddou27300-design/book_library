@@ -14,22 +14,21 @@ import com.library.entity.Category;
 import com.library.repository.BookRepository;
 import com.library.repository.CategoryRepository;
 import com.library.service.BookService;
-import com.library.service.FileStorageService;
+import com.library.service.CloudStorageService;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-    private final FileStorageService fileStorageService;
+    private final CloudStorageService cloudStorageService;
 
-    // Standard Java constructor injection replacing @RequiredArgsConstructor
-    public BookServiceImpl(BookRepository bookRepository, 
-                    CategoryRepository categoryRepository, 
-                    FileStorageService fileStorageService) {
+    public BookServiceImpl(BookRepository bookRepository,
+                    CategoryRepository categoryRepository,
+                    CloudStorageService cloudStorageService) {
         this.bookRepository = bookRepository;
         this.categoryRepository = categoryRepository;
-        this.fileStorageService = fileStorageService;
+        this.cloudStorageService = cloudStorageService;
     }
 
     @Override
@@ -51,18 +50,18 @@ public class BookServiceImpl implements BookService {
                 .active(true)
                 .build();
 
-        // Store PDF
+        // Upload PDF to Supabase Cloud Storage
         MultipartFile pdfFile = dto.getPdfFile();
         if (pdfFile != null && !pdfFile.isEmpty()) {
-            String pdfPath = fileStorageService.storeBookPdf(pdfFile);
-            book.setPdfPath(pdfPath);
+            String pdfUrl = cloudStorageService.uploadFile(pdfFile, "pdfs");
+            book.setPdfFileUrl(pdfUrl);
         }
 
-        // Store cover image
+        // Upload cover image to Supabase Cloud Storage
         MultipartFile coverFile = dto.getCoverFile();
         if (coverFile != null && !coverFile.isEmpty()) {
-            String coverPath = fileStorageService.storeCoverImage(coverFile);
-            book.setCoverImage(coverPath);
+            String coverUrl = cloudStorageService.uploadFile(coverFile, "covers");
+            book.setCoverImageUrl(coverUrl);
         }
 
         return bookRepository.save(book);
@@ -87,15 +86,15 @@ public class BookServiceImpl implements BookService {
         // Update PDF if new one uploaded
         MultipartFile pdfFile = dto.getPdfFile();
         if (pdfFile != null && !pdfFile.isEmpty()) {
-            if (book.getPdfPath() != null) fileStorageService.deleteFile(book.getPdfPath());
-            book.setPdfPath(fileStorageService.storeBookPdf(pdfFile));
+            cloudStorageService.deleteFile(book.getPdfFileUrl());
+            book.setPdfFileUrl(cloudStorageService.uploadFile(pdfFile, "pdfs"));
         }
 
         // Update cover if new one uploaded
         MultipartFile coverFile = dto.getCoverFile();
         if (coverFile != null && !coverFile.isEmpty()) {
-            if (book.getCoverImage() != null) fileStorageService.deleteFile(book.getCoverImage());
-            book.setCoverImage(fileStorageService.storeCoverImage(coverFile));
+            cloudStorageService.deleteFile(book.getCoverImageUrl());
+            book.setCoverImageUrl(cloudStorageService.uploadFile(coverFile, "covers"));
         }
 
         return bookRepository.save(book);
@@ -105,8 +104,8 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void deleteBook(Long id) {
         Book book = findById(id);
-        if (book.getPdfPath() != null) fileStorageService.deleteFile(book.getPdfPath());
-        if (book.getCoverImage() != null) fileStorageService.deleteFile(book.getCoverImage());
+        cloudStorageService.deleteFile(book.getPdfFileUrl());
+        cloudStorageService.deleteFile(book.getCoverImageUrl());
         bookRepository.delete(book);
     }
 

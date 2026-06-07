@@ -120,8 +120,8 @@ public class AdminController {
         dto.setPublishYear(book.getPublishYear());
         dto.setPublisher(book.getPublisher());
         dto.setLanguage(book.getLanguage());
-        dto.setExistingPdfPath(book.getPdfPath());
-        dto.setExistingCoverImage(book.getCoverImage());
+        dto.setExistingPdfPath(book.getPdfFileUrl());
+        dto.setExistingCoverImage(book.getCoverImageUrl());
 
         model.addAttribute("bookDto", dto);
         model.addAttribute("categories", categoryService.findAll());
