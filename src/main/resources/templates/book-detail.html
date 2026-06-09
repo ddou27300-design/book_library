@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout(~{::main}, ~{::title}, ~{}, ~{})}">
+<head><title th:text="${book.title + ' - GROUP2'}">Book Detail</title></head>
+<body>
+<main>
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/books">Catalog</a></li>
+            <li class="breadcrumb-item active" th:text="${book.title}"></li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <!-- Book Cover -->
+        <div class="col-md-4 col-lg-3">
+            <div class="book-detail-cover">
+                <img th:if="${book.coverImageUrl != null}"
+                     th:src="${book.coverImageUrl}"
+                     th:alt="${book.title}" class="img-fluid rounded-3 shadow-lg"/>
+                <div th:unless="${book.coverImageUrl != null}" class="book-cover-large">
+                    <i class="bi bi-book-fill"></i>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 mt-4">
+                <a th:if="${book.pdfFileUrl != null}"
+                   th:href="@{/books/{id}/read(id=${book.id})}"
+                   class="btn btn-primary-custom">
+                    <i class="bi bi-eye me-2"></i>Read Online
+                </a>
+
+                <!-- Download button: uses JS fetch+blob to force file save dialog -->
+                <button th:if="${book.pdfFileUrl != null}"
+                        sec:authorize="isAuthenticated()"
+                        th:attr="data-book-id=${book.id}, data-book-title=${book.title}"
+                        onclick="handleDownload(this)"
+                        class="btn btn-outline-primary">
+                    <i class="bi bi-download me-2"></i>Download PDF
+                </button>
+
+                <a th:if="${book.pdfFileUrl != null}"
+                   sec:authorize="!isAuthenticated()"
+                   href="/login"
+                   class="btn btn-outline-primary">
+                    <i class="bi bi-download me-2"></i>Login to Download
+                </a>
+
+                <!-- Favorite Toggle -->
+                <form th:if="${currentUser != null}"
+                      th:action="@{/books/{id}/favorite(id=${book.id})}" method="post">
+                    <button type="submit"
+                            th:class="${isFavorite} ? 'btn btn-danger w-100' : 'btn btn-outline-danger w-100'">
+                        <i th:class="${isFavorite} ? 'bi bi-heart-fill me-2' : 'bi bi-heart me-2'"></i>
+                        <span th:text="${isFavorite} ? 'Remove Favorite' : 'Add to Favorites'">Favorite</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Book Info -->
+        <div class="col-md-8 col-lg-9">
+            <div class="book-detail-info">
+                <span class="book-category-badge" th:text="${book.category?.name}">Category</span>
+                <h1 class="book-detail-title" th:text="${book.title}">Book Title</h1>
+                <p class="book-detail-author">
+                    <i class="bi bi-person-fill me-2"></i>
+                    <span th:text="${book.author}">Author</span>
+                </p>
+
+                <div class="book-stats-row">
+                    <div class="stat-badge">
+                        <i class="bi bi-download me-1"></i>
+                        <span th:text="${book.totalDownloads}">0</span> Downloads
+                    </div>
+                    <div class="stat-badge" th:if="${book.publishYear != null}">
+                        <i class="bi bi-calendar me-1"></i>
+                        <span th:text="${book.publishYear}">2024</span>
+                    </div>
+                    <div class="stat-badge" th:if="${book.language != null}">
+                        <i class="bi bi-translate me-1"></i>
+                        <span th:text="${book.language}">English</span>
+                    </div>
+                </div>
+
+                <!-- Details Table -->
+                <div class="book-details-table mt-4">
+                    <div class="detail-row" th:if="${book.isbn != null}">
+                        <span class="detail-label">ISBN</span>
+                        <span class="detail-value" th:text="${book.isbn}"></span>
+                    </div>
+                    <div class="detail-row" th:if="${book.publisher != null}">
+                        <span class="detail-label">Publisher</span>
+                        <span class="detail-value" th:text="${book.publisher}"></span>
+                    </div>
+                    <div class="detail-row" th:if="${book.publishYear != null}">
+                        <span class="detail-label">Year</span>
+                        <span class="detail-value" th:text="${book.publishYear}"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Category</span>
+                        <span class="detail-value" th:text="${book.category?.name}"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Added</span>
+                        <span class="detail-value" th:text="${#temporals.format(book.createdAt, 'MMM dd, yyyy')}"></span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="book-description mt-4" th:if="${book.description != null}">
+                    <h5 class="fw-semibold mb-3">About this Book</h5>
+                    <p class="text-muted lh-lg" th:text="${book.description}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+<script>
+function handleDownload(btn) {
+    const bookId = btn.getAttribute('data-book-id');
+    const bookTitle = btn.getAttribute('data-book-title') || 'book';
+    const url = '/books/' + bookId + '/download-file';
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Downloading...';
+
+    fetch(url, { credentials: 'same-origin' })
+        .then(function(response) {
+            if (!response.ok) throw new Error('Server error: ' + response.status);
+            return response.blob();
+        })
+        .then(function(blob) {
+            var blobUrl = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = bookTitle + '.pdf';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+            }, 300);
+        })
+        .catch(function(err) {
+            alert('Download failed. Please try again.\n' + err.message);
+            console.error(err);
+        })
+        .finally(function() {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-download me-2"></i>Download PDF';
+        });
+}
+</script>
+</body>
+</html>

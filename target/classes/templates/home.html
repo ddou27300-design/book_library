@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: layout(~{::main}, ~{::title}, ~{}, ~{})}">
+<head>
+    <title>BookLib - Your Digital Library</title>
+</head>
+<body>
+<main>
+
+<!-- ====== HERO ====== -->
+<section class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="container position-relative">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <div class="hero-badge">
+                    <i class="bi bi-stars me-2"></i>Free Online Library
+                </div>
+                <h1 class="hero-title">
+                    Discover Your Next<br>
+                    <span class="text-gradient">Great Read</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Access thousands of books online. Read in your browser, download PDFs, and build your personal reading list — all free.
+                </p>
+                <div class="hero-stats d-flex gap-4 mb-4">
+                    <div class="stat-item">
+                        <div class="stat-number" th:text="${totalBooks}">0</div>
+                        <div class="stat-label">Books</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" th:text="${totalDownloads}">0</div>
+                        <div class="stat-label">Downloads</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" th:text="${categories.size()}">0</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="/books" class="btn btn-hero-primary">
+                        <i class="bi bi-grid me-2"></i>Browse Library
+                    </a>
+                    <a href="/register" class="btn btn-hero-outline" sec:authorize="!isAuthenticated()">
+                        <i class="bi bi-person-plus me-2"></i>Join Free
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hero-illustration">
+                    <div class="book-stack">
+                        <div class="book-card-hero book-1">
+                            <i class="bi bi-book-fill"></i>
+                        </div>
+                        <div class="book-card-hero book-2">
+                            <i class="bi bi-journal-text"></i>
+                        </div>
+                        <div class="book-card-hero book-3">
+                            <i class="bi bi-file-earmark-pdf"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== CATEGORIES ====== -->
+<section class="section-py bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">Browse by Genre</span>
+            <h2 class="section-title">Explore Categories</h2>
+        </div>
+        <div class="row g-3">
+            <div class="col-6 col-md-3 col-lg-2" th:each="cat : ${categories}">
+                <a th:href="@{/books(categoryId=${cat.id})}" class="category-card text-decoration-none">
+                    <div class="category-icon">
+                        <i class="bi bi-tag-fill"></i>
+                    </div>
+                    <div class="category-name" th:text="${cat.name}">Category</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== LATEST BOOKS ====== -->
+<section class="section-py">
+    <div class="container">
+        <div class="section-header d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <span class="section-badge">Fresh Picks</span>
+                <h2 class="section-title mb-0">Recently Added</h2>
+            </div>
+            <a href="/books" class="btn btn-outline-primary">View All <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-md-4 col-lg-3" th:each="book : ${latestBooks}">
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img th:if="${book.coverImage != null}"
+                             th:src="@{'/'+${book.coverImage}}"
+                             th:alt="${book.title}" class="img-fluid"/>
+                        <div th:unless="${book.coverImage != null}" class="book-cover-placeholder">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <div class="book-overlay">
+                            <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-light">
+                                <i class="bi bi-eye me-1"></i>View
+                            </a>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <span class="book-category" th:text="${book.category?.name}">Category</span>
+                        <h6 class="book-title" th:text="${book.title}">Book Title</h6>
+                        <p class="book-author"><i class="bi bi-person me-1"></i><span th:text="${book.author}">Author</span></p>
+                        <div class="book-meta d-flex justify-content-between">
+                            <span class="downloads"><i class="bi bi-download me-1"></i><span th:text="${book.totalDownloads}">0</span></span>
+                            <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-primary-custom">Read</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${latestBooks.empty}" class="col-12 text-center text-muted py-5">
+                <i class="bi bi-inbox display-3 d-block mb-3"></i>
+                <p>No books yet. Check back soon!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== TOP DOWNLOADS ====== -->
+<section class="section-py bg-light" th:if="${!topBooks.empty}">
+    <div class="container">
+        <div class="section-header d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <span class="section-badge">Most Popular</span>
+                <h2 class="section-title mb-0">Top Downloads</h2>
+            </div>
+            <a href="/books" class="btn btn-outline-primary">View All <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-md-4 col-lg-3" th:each="book : ${topBooks}">
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img th:if="${book.coverImage != null}"
+                             th:src="@{'/'+${book.coverImage}}"
+                             th:alt="${book.title}" class="img-fluid"/>
+                        <div th:unless="${book.coverImage != null}" class="book-cover-placeholder">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <div class="book-badge">
+                            <i class="bi bi-fire me-1"></i>Popular
+                        </div>
+                        <div class="book-overlay">
+                            <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-light">
+                                <i class="bi bi-eye me-1"></i>View
+                            </a>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <span class="book-category" th:text="${book.category?.name}">Category</span>
+                        <h6 class="book-title" th:text="${book.title}">Book Title</h6>
+                        <p class="book-author"><i class="bi bi-person me-1"></i><span th:text="${book.author}">Author</span></p>
+                        <div class="book-meta d-flex justify-content-between">
+                            <span class="downloads"><i class="bi bi-download me-1"></i><span th:text="${book.totalDownloads}">0</span></span>
+                            <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-primary-custom">Read</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== CTA ====== -->
+<section class="cta-section" sec:authorize="!isAuthenticated()">
+    <div class="container text-center">
+        <h2 class="cta-title">Start Your Reading Journey Today</h2>
+        <p class="cta-subtitle">Join thousands of readers. Free forever.</p>
+        <a href="/register" class="btn btn-hero-primary btn-lg">
+            <i class="bi bi-person-plus me-2"></i>Create Free Account
+        </a>
+    </div>
+</section>
+
+</main>
+</body>
+</html>

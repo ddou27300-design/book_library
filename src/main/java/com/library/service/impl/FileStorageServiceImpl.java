@@ -60,7 +60,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             Path targetPath = dirPath.resolve(filename);
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            return dir + "/" + filename;
+            return "/" + dir + "/" + filename;
         } catch (IOException e) {
             throw new RuntimeException("Could not store file: " + e.getMessage(), e);
         }
@@ -78,7 +78,8 @@ public class FileStorageServiceImpl implements FileStorageService {
     public void deleteFile(String filePath) {
         if (filePath == null) return;
         try {
-            Path path = Paths.get(filePath).toAbsolutePath();
+            String cleanPath = filePath.startsWith("/") ? filePath.substring(1) : filePath;
+            Path path = Paths.get(cleanPath).toAbsolutePath();
             Files.deleteIfExists(path);
         } catch (IOException e) {
             // log but don't throw
